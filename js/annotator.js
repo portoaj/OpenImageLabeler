@@ -6,4 +6,5 @@ function setup() {
     fill(240, 98, 146);
     noStroke();
     rect(0, 0, width, height);
+    $(window).resize(() => {resizeCanvas(placeholder.size()['width'], placeholder.size()['height'])});
 }
