@@ -1,6 +1,21 @@
-//Create file selector objects to handle importing images or image folders
+//Create file selector objects to handle importing tempImages or image folders
 window.addEventListener('DOMContentLoaded', () => {
-    let folderImportButton = document.getElementById('import-folder')
+    let imageImportButton = document.getElementById('import-image');
+    imageImportButton.onclick = () => {
+        let folderSelector = document.createElement('input');
+        folderSelector.setAttribute('type', 'file');
+        //Process click event
+        folderSelector.addEventListener('change', (event) => {
+            importImage(event.target.files[0]);
+            //let fileArray = [];
+            //const files = event.target.files;
+            // for (let i = 0; i < files.length; i++)
+            //   fileArray.push(files[i]);
+            // importImage(fileArray)
+        })
+        folderSelector.click();
+    }
+    let folderImportButton = document.getElementById('import-folder');
     folderImportButton.onclick = () => {
         let folderSelector = document.createElement('input');
         folderSelector.setAttribute('type', 'file');
@@ -18,22 +33,107 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function importImage() {
-
+function importImage(tempImageFile) {
+    let tempImage = null;
+    let processed = false;
+    let valid = true;
+    const validExtensions = ['jpg', 'png'];
+    const validHeaders = ['data:image/png;', 'data:image/jpeg;'];
+    const processImage = () => {
+        let validImages = [];
+        let invalidImages = [];
+        //Make sure uploaded tempImages are valid
+        const fileName = tempImage.name;
+        let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        const base64 = tempImage.base64;
+        //Check image is not already uploaded
+        if (imageAlreadyUploaded(fileName)) {
+            valid = false;
+        }
+        //If the base64 of the image is invalid skip it
+        if (base64.indexOf('base64') === -1) {
+            valid = false;
+        }
+        let header = base64.substring(0, base64.indexOf('base64'));
+        //If the extension or image header is invalid skip it
+        if (!validExtensions.includes(extension) || !validHeaders.includes(header)) {
+            valid = false;
+        } else {
+            validImages.push(tempImage);
+        }
+        //Alert the user which files were invalid if any
+        if (!valid) {
+            let alertStr = 'The following file was not in a valid format or was already uploaded and will be ignored: ' + invalidImages[0];
+            alert(alertStr);
+            return;
+        }
+        //Get the width, height, and depth for each image
+        loadImage(tempImage.base64, img => {
+            reference = tempImage;
+            reference.width = img.width;
+            reference.height = img.height;
+            img.loadPixels();
+            let isColor = false;
+            for (let i = 0; i < img.width; i++) {
+                if (isColor)
+                    break;
+                for (let j = 0; j < img.height; j++) {
+                    vals = img.get(i, j);
+                    for (let k = 0; k < 4; k++) {
+                        if (vals[0] !== vals[1] || vals[1] !== vals[2]) {
+                            reference.depth = 3;
+                            isColor = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!isColor)
+                reference.depth = 1;
+        });
+        appendImages(validImages);
+        updateNavigator();
+    }
+    const recurseImage = (fileArray) => {
+        if (processed) {
+            processImage();
+            return;
+        }
+        const reader = new FileReader();
+        reader.addEventListener('load', function () {
+            tempImage = {
+                'base64': reader.result,
+                'name': name,
+                'relpath': relpath,
+                'width': -1,
+                'height': -1,
+                'depth': -1,
+                'annotations': [],
+                'annotated': false
+            };
+            processed = true;
+            recurseImage(fileArray);
+        }, false);
+        let currentImage = tempImageFile;
+        let name = currentImage['name'];
+        let relpath = currentImage.webkitRelativePath;
+        reader.readAsDataURL(currentImage);
+    }
+    recurseImage(tempImageFile);
 }
 
 function importImageFolder(fileArray) {
-    let images = [];
+    let tempImages = [];
     const validExtensions = ['jpg', 'png'];
     const validHeaders = ['data:image/png;', 'data:image/jpeg;'];
     const processImages = () => {
         let validImages = [];
         let invalidImages = [];
-        //Make sure uploaded images are valid
-        for (let i = 0; i < images.length; i++) {
-            const fileName = images[i].name;
+        //Make sure uploaded tempImages are valid
+        for (let i = 0; i < tempImages.length; i++) {
+            const fileName = tempImages[i].name;
             let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-            const base64 = images[i].base64;
+            const base64 = tempImages[i].base64;
             //Check image is not already uploaded
             if (imageAlreadyUploaded(fileName)) {
                 invalidImages.push(fileName);
@@ -49,7 +149,7 @@ function importImageFolder(fileArray) {
             if (!validExtensions.includes(extension) || !validHeaders.includes(header)) {
                 invalidImages.push(fileName);
             } else {
-                validImages.push(images[i]);
+                validImages.push(tempImages[i]);
             }
         }
         //Alert the user which files were invalid if any
@@ -86,7 +186,7 @@ function importImageFolder(fileArray) {
                         }
                     }
                 }
-                if(!isColor)
+                if (!isColor)
                     reference.depth = 1;
             });
         }
@@ -100,7 +200,7 @@ function importImageFolder(fileArray) {
         }
         const reader = new FileReader();
         reader.addEventListener('load', function () {
-            images.push({
+            tempImages.push({
                 'base64': reader.result,
                 'name': name,
                 'relpath': relpath,
@@ -121,9 +221,9 @@ function importImageFolder(fileArray) {
 }
 
 function changeImage(direction) {
-    if(direction === 'left')
+    if (direction === 'left')
         navigateLeft();
-    else if(direction === 'right')
+    else if (direction === 'right')
         navigateRight();
 }
 
