@@ -5,7 +5,7 @@
     .bold {
         font-weight: bold;
     }
-    .navigation {
+    #navigation {
         height: 53px;
         padding: 15px;
         border-top: 1px solid rgb(221, 221, 221);
@@ -34,6 +34,9 @@
     }
     #add-label-button {
         transform: translateY(-3px);
+    }
+    .no-margin {
+        margin: 0;
     }
 }
 .option-padding {

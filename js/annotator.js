@@ -1,12 +1,13 @@
 let mode = null;
-let images = null;
+let images = [];
 /*Image Object structure
 {
     'base64': base64,
     'name': name,
     'relpath': relpath,
-    'height': -1,
     'width': -1,
+    'height': -1,
+    'depth': -1,
     'annotations': [],
     'annotated': false
 }
@@ -33,4 +34,20 @@ function setup() {
     $(window).resize(() => {
         resizeCanvas(placeholder.size()['width'], placeholder.size()['height'])
     });
+}
+
+function appendImages(_images) {
+    images = images.concat(_images);
+}
+
+function getImages() {
+    return images;
+}
+
+function imageAlreadyUploaded(imageName) {
+    for(let i = 0; i < images.length; i++) {
+        if(imageName ===images[i].name)
+            return true;
+    }
+    return false;
 }

@@ -35,7 +35,7 @@
                                             <li class="option-padding pink-text text-lighten-2"><i
                                                     class="material-icons sub-icons left">insert_photo</i>Image</li>
                                         </a>
-                                        <a href="#!" class="waves-effect waves-purple">
+                                        <a href="#!" id="import-folder" class="waves-effect waves-purple">
                                             <li class="option-padding pink-text text-lighten-2"><i
                                                     class="material-icons sub-icons left">folder_open</i>Image Folder
                                             </li>
@@ -70,12 +70,12 @@
                         </ul>
                     </li>
                     <li>
-                        <div class="navigation z-depth-1 pink-text text-lighten-2 center">
-                            0/0
-                             <a href="#"><i
-                                    class="material-icons left pink-text text-lighten-2 waves-effect waves-purple">arrow_back_ios</i></a>
-                            <a href="#"><i
-                                    class="material-icons right flip-horizontal pink-text text-lighten-2 waves-effect waves-purple">arrow_back_ios</i></a>
+                        <div id="navigation" class="z-depth-1 pink-text text-lighten-2 center">
+                             <a onclick="changeImage('left');" href="#"><i
+                                    class="no-margin material-icons left pink-text text-lighten-2 waves-effect waves-purple">arrow_back_ios</i></a>
+                                    <span id="navigator-text">0 / 0</span>
+                            <a onclick="changeImage('right');" href="#"><i
+                                    class="no-margin material-icons right flip-horizontal pink-text text-lighten-2 waves-effect waves-purple">arrow_back_ios</i></a>
                         </div>
                     </li>
                 </ul>
@@ -129,6 +129,7 @@
     <!-- Custom JS -->
     <script src="js/annotator.js"></script>
     <script src="js/inputHandler.js"></script>
+    <script src="js/navigator.js"></script>
     <script>
         $(document).ready(function () {
             $('.collapsible').collapsible();
