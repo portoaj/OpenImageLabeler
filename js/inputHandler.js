@@ -220,6 +220,15 @@ function importImageFolder(fileArray) {
     recurseImages(fileArray);
 }
 
+function changeAnnotationMode(mode) {
+    if(mode === 'rect') {
+        setRectMode();
+    }
+    else if(mode === 'poly') {
+        setPolyMode();
+    }
+}
+
 function changeImage(direction) {
     if (direction === 'left')
         navigateLeft();

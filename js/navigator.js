@@ -2,6 +2,7 @@ let index = 1;
 
 function updateNavigator() {
     document.getElementById('navigator-text').textContent = index + ' / ' + getImages().length;
+    updateImage();
 }
 
 function navigateLeft() {
