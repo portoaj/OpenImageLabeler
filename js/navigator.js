@@ -2,7 +2,8 @@ let index = 1;
 
 function updateNavigator() {
     document.getElementById('navigator-text').textContent = index + ' / ' + getImages().length;
-    updateImage();
+    if(getImages().length > 0)
+        updateImage();
 }
 
 function navigateLeft() {
@@ -17,7 +18,7 @@ function navigateLeft() {
 function navigateRight() {
     console.log('right');
     index += 1;
-    if (index >= getImages().length) {
+    if (index > getImages().length) {
         if (getImages().length > 0) {
             index = 1;
         } else {
