@@ -41,8 +41,8 @@
 }
 
 .row #add-label-button {
-  -webkit-transform: translateY(-3px);
-          transform: translateY(-3px);
+  -webkit-transform: translateY(-4px);
+          transform: translateY(-4px);
 }
 
 .row .no-margin {
