@@ -43,9 +43,8 @@ function draw() {
     if (!currentImagep5)
         return;
     image(currentImagep5, 0, 0, width, height);
-
+    //Draw partially drawn rect
     if (drawingBox) {
-        console.log('drawbox');
         stroke(255, 207, 61, 150);
         fill(255, 207, 61, 75);
         let drawingBoxStartCanvas = imagePositionToCanvasPosition(drawingBoxStart);
@@ -53,9 +52,9 @@ function draw() {
         let xmax = max(drawingBoxStartCanvas.x, constrainedMousePosition().x);
         let ymin = min(drawingBoxStartCanvas.y, constrainedMousePosition().y);
         let ymax = max(drawingBoxStartCanvas.y, constrainedMousePosition().y);
-        console.log(xmin, ymin, xmax, ymax);
         rect(xmin, ymin, xmax - xmin, ymax - ymin);
     }
+    //Draw annotations except selected annotation
     for (let i = 0; i < currentImage.annotations.length; i++) {
         if (currentImage.annotations[i] != selectedAnnotation) {
             stroke(35, 232, 45, 200);
@@ -66,15 +65,30 @@ function draw() {
             rect(minRect.x, minRect.y, maxRect.x - minRect.x, maxRect.y - minRect.y);
         }
     }
+    //Draw selected annotation if there is one
+    if (selectedAnnotation) {
+        stroke(79, 195, 247, 200);
+        fill(79, 195, 247, 100);
+        let minRect = imagePositionToCanvasPosition(selectedAnnotation.points[0]);
+        let maxRect = imagePositionToCanvasPosition(selectedAnnotation.points[1]);
+        rect(minRect.x, minRect.y, maxRect.x - minRect.x, maxRect.y - minRect.y);
+    }
 }
 
 function mousePressed() {
     //Ignore mouse click if mouse out of canvas
-    if (mouseX > width || mouseX < 0 || mouseY > height || mouseY < 0)
+    if (mouseX > width || mouseX < 0 || mouseY > height || mouseY < 0) {
+        selectedAnnotation = null;
         return;
+    }
     //Ignore mouse click if no image is loaded
     if (!currentImage)
         return;
+    //Don't create annotation if trying to select one
+    if (trySelect())
+        return;
+    else
+        selectedAnnotation = null;
     if (mode === 'rect') {
         if (drawingBox === false) {
             drawingBox = true;
@@ -99,6 +113,26 @@ function mouseReleased() {
         drawingBox = false;
         drawingBoxStart = null;
     }
+}
+
+function trySelect() {
+    for (let i = 0; i < currentImage.annotations.length; i++) {
+        if (currentImage.annotations[i].mode === 'rect') {
+            let minRect = imagePositionToCanvasPosition(currentImage.annotations[i].points[0]);
+            let maxRect = imagePositionToCanvasPosition(currentImage.annotations[i].points[1]);
+            const xmin = minRect.x;
+            const ymin = minRect.y;
+            const xmax = maxRect.x;
+            const ymax = maxRect.y;
+            const mousePosition = constrainedMousePosition();
+            console.log(xmin, xmax, ymin, ymax);
+            if (mousePosition.x > xmin && mousePosition.x < xmax && mousePosition.y > ymin && mousePosition.y < ymax) {
+                selectedAnnotation = currentImage.annotations[i];
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function constrainedMousePosition() {
