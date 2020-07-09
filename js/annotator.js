@@ -2,6 +2,7 @@ let mode = null;
 let images = [];
 let drawingBox = false;
 let drawingBoxStart = null;
+let drawingPoly = false;
 let polyPoints = [];
 let currentImage = null;
 let currentImagep5 = null;
@@ -95,23 +96,41 @@ function mousePressed() {
             drawingBoxStart = canvasPositionToImagePosition(constrainedMousePosition());
         }
     }
+    else if (mode === 'poly') {
+
+    }
 }
 
 function mouseReleased() {
     if (drawingBox) {
         let xmin = min(drawingBoxStart.x, constrainedMouseImagePosition().x);
         let xmax = max(drawingBoxStart.x, constrainedMouseImagePosition().x);
+        
         let ymin = min(drawingBoxStart.y, constrainedMouseImagePosition().y);
         let ymax = max(drawingBoxStart.y, constrainedMouseImagePosition().y);
-        let annotation = {
-            'label': 'defaultrectlabelshouldchange',
-            'points': [createVector(xmin, ymin), createVector(xmax, ymax)],
-            'mode': mode
-        };
-        currentImage.annotated = true;
-        currentImage.annotations.push(annotation);
+        if(xmax - xmin > 16 && ymax - ymin > 16) {
+            let annotation = {
+                'label': 'defaultrectlabelshouldchange',
+                'points': [createVector(xmin, ymin), createVector(xmax, ymax)],
+                'mode': mode
+            };
+            currentImage.annotated = true;
+            currentImage.annotations.push(annotation);
+        }
         drawingBox = false;
         drawingBoxStart = null;
+    }
+}
+
+function keyPressed() {
+    if((keyCode === 8 || keyCode === 46) && selectedAnnotation !== null) {
+        let selectedAnnotationIndex = 0;
+        for(let i = 0; i < currentImage.annotations.length; i++) {
+            if(currentImage.annotations[i] === selectedAnnotation)
+                selectedAnnotationIndex = i;
+        }
+        currentImage.annotations.splice(selectedAnnotationIndex, 1);
+        selectedAnnotation = null;
     }
 }
 
@@ -125,20 +144,22 @@ function trySelect() {
             const xmax = maxRect.x;
             const ymax = maxRect.y;
             const mousePosition = constrainedMousePosition();
-            console.log(xmin, xmax, ymin, ymax);
             if (mousePosition.x > xmin && mousePosition.x < xmax && mousePosition.y > ymin && mousePosition.y < ymax) {
                 selectedAnnotation = currentImage.annotations[i];
                 return true;
             }
         }
     }
+        //TODO make this work: https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon#:~:text=Look%20at%20the%20polygon%20as,it%20is%20inside%20the%20polygon.
     return false;
 }
 
+//Get mouse position constrained by canvas bounds
 function constrainedMousePosition() {
     return createVector(constrain(mouseX, 0, width), constrain(mouseY, 0, height));
 }
 
+//Get mouse position constrained by canvas bounds image pixel coordinates
 function constrainedMouseImagePosition() {
     return canvasPositionToImagePosition(constrainedMousePosition());
 }
@@ -173,8 +194,6 @@ function updateImage() {
 
 function setPolyMode() {
     mode = 'poly';
-    //TODO make this work: https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon#:~:text=Look%20at%20the%20polygon%20as,it%20is%20inside%20the%20polygon.
-    console.log('set poly');
 }
 
 function imageAlreadyUploaded(imageName) {
