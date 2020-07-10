@@ -38,6 +38,18 @@
     .no-margin {
         margin: 0;
     }
+    .input {
+        border-bottom-color: rgba(240, 98, 146, 0);
+        border: none;
+    }
+    div.focus {
+        border-bottom-color: #81d4fa;
+        transition: border-bottom-color .2s;
+        box-shadow: none !important;
+    }
+    .chips {
+        border-bottom-color: rgb(240, 98, 146);
+    }
 }
 .option-padding {
     padding: 20px;

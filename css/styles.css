@@ -49,6 +49,23 @@
   margin: 0;
 }
 
+.row .input {
+  border-bottom-color: rgba(240, 98, 146, 0);
+  border: none;
+}
+
+.row div.focus {
+  border-bottom-color: #81d4fa;
+  -webkit-transition: border-bottom-color .2s;
+  transition: border-bottom-color .2s;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+.row .chips {
+  border-bottom-color: #f06292;
+}
+
 .option-padding {
   padding: 20px;
 }

@@ -109,9 +109,7 @@
                     <li>
                         <div class="labels-container z-depth-1">
                             
-                            <span class="bold pink-text text-lighten-2">Labels</span><a href="#" id="add-label-button"
-                                class="right btn-floating btn-small waves-effect waves-purple light-blue lighten-2"><i
-                                    class="material-icons">add</i></a>
+                            <span class="bold pink-text text-lighten-2">Labels</span>
                             <div class="chips-placeholder"></div>
                         </div>
                     </li>
@@ -135,7 +133,7 @@
             $('.collapsible').collapsible();
         });
         $('.chips-placeholder').chips({
-            onChipSelect: (input) => console.log(input[0]['M_Chips']['_selectedChip'][0]['textContent'].slice(0, -5)),
+            onChipSelect: (input) => console.log(input[0]['M_Chips']['_selectedChip']),
             placeholder: 'Enter a label',
             secondaryPlaceholder: '+Label',
         });
