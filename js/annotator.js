@@ -42,7 +42,6 @@ function setup() {
 }
 
 function draw() {
-    console.log(deltaTime);
     if (!currentImagep5)
         return;
     image(currentImagep5, 0, 0, width, height);
