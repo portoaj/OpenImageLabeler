@@ -1,10 +1,12 @@
 let chipsInstance = null;
 let label = 'nolabel';
 
+//Sets chip instance as DOM initializes
 function setChipsInstance(instance) {
     chipsInstance = instance;
 }
 
+//Handles chip selection and background highlighting
 function chipSelected(chipObj) {
     label = chipObj.textContent.slice(0, chipObj.textContent.length - 5);
     let chipObjs = chipsInstance['$chips'];
@@ -12,9 +14,14 @@ function chipSelected(chipObj) {
         chipObjs[i].style.backgroundColor = '#e4e4e4';
     }
     chipObj.style.backgroundColor = '#4fc3f7';
-    console.log(label);
 }
 
+//Makes sure annotations only occur when label is valid
+function canAnnotate() {
+    return label !== null;
+}
+
+//Listener for when chips are added, selects that chip if it is the only one
 function chipAdded(chipObj, singleChip) {
     if (singleChip) {
         label = chipObj.textContent.slice(0, chipObj.textContent.length - 5);
@@ -22,20 +29,20 @@ function chipAdded(chipObj, singleChip) {
             trySelectChip(0);
         else {
             chipsInstance.selectChip(0);
-            console.log(label)
         }
     }
 }
 
+//Selects a chip if chipsInstance has loaded, otherwise it tries again after a delay
 function trySelectChip(index) {
     if (chipsInstance !== null) {
         chipsInstance.selectChip(index)
-        console.log(label)
     } else {
         setTimeout(trySelectChip, 30, index);
     }
 }
 
+//Listener for when chips are deleted, sets label apprpriately
 function chipDeleted(singleChip, noChips) {
     if (singleChip) {
         label = chipsInstance['chipsData'][0]['tag'];
@@ -43,11 +50,9 @@ function chipDeleted(singleChip, noChips) {
             trySelectChip(0);
         else {
             chipsInstance.selectChip(0);
-            console.log(label)
         }
     } else if (noChips) {
         label = null;
-        console.log(label);
     } else {
         let labeledChipExists = false;
         const chipsData = chipsInstance['chipsData'];
@@ -62,12 +67,11 @@ function chipDeleted(singleChip, noChips) {
                 trySelectChip(0);
             else {
                 chipsInstance.selectChip(0);
-                console.log(label)
             }
         }
     }
 }
-
+//Return label
 function getLabel() {
     return label;
 }
