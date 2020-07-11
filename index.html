@@ -110,7 +110,7 @@
                         <div class="labels-container z-depth-1">
                             
                             <span class="bold pink-text text-lighten-2">Labels</span>
-                            <div class="chips-placeholder"></div>
+                            <div class="chips-placeholder" id="chips-selector"></div>
                         </div>
                     </li>
                 </ul>
@@ -128,15 +128,24 @@
     <script src="js/annotator.js"></script>
     <script src="js/inputHandler.js"></script>
     <script src="js/navigator.js"></script>
+    <script src="js/chipHandler.js"></script>
     <script>
         $(document).ready(function () {
             $('.collapsible').collapsible();
         });
         $('.chips-placeholder').chips({
-            onChipSelect: (input) => console.log(input[0]['M_Chips']['_selectedChip']),
+            onChipSelect: (input) => chipSelected(input[0]['M_Chips']['_selectedChip'][0]),
+            onChipAdd: (input) => chipAdded(input[0].childNodes[input[0].childNodes.length - 2], input[0].childNodes.length === 2),
+            onChipDelete: (input) => chipDeleted(input[0].childNodes.length === 2, input[0].childNodes.length === 1),
             placeholder: 'Enter a label',
             secondaryPlaceholder: '+Label',
         });
+        let chipsStartupInstance = M.Chips.getInstance(document.getElementById('chips-selector'));
+        chipsStartupInstance.addChip({
+            tag: 'default'
+        });
+        setChipsInstance(chipsStartupInstance);
+       // chipsInstance.selectChip(1);
     </script>
 </body>
 </html>
