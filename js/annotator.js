@@ -135,8 +135,16 @@ function mousePressed() {
         return;
     } else
         selectedAnnotation = null;
+    
+    
     //Start drawing rect if applicable
     if (mode === 'rect') {
+        //Must have label selected
+        //TODO alert user if this causes issue
+        if(!canAnnotate) {
+            return;
+        }
+
         if (drawingBox === false) {
             drawingBox = true;
             drawingBoxStart = canvasPositionToImagePosition(constrainedMousePosition());
@@ -149,7 +157,7 @@ function mousePressed() {
             polyPoints.push(constrainedMouseImagePosition());
         } else if (dist(constrainedMousePosition().x, constrainedMousePosition().y, imagePositionToCanvasPosition(polyPoints[0]).x, imagePositionToCanvasPosition(polyPoints[0]).y) < 20) {
             let annotation = {
-                'label': 'defaultpolylabelshouldchange',
+                'label': getLabel(),
                 'points': polyPoints,
                 'mode': mode
             };
@@ -165,6 +173,12 @@ function mousePressed() {
 
 function mouseReleased() {
     if (drawingBox) {
+        //Only create box annotation if there is a valid label
+        if(!canAnnotate()) {
+            drawingBox = false;
+            drawingBoxStart = null;
+            return;
+        }
         let xmin = min(drawingBoxStart.x, constrainedMouseImagePosition().x);
         let xmax = max(drawingBoxStart.x, constrainedMouseImagePosition().x);
 
@@ -172,7 +186,7 @@ function mouseReleased() {
         let ymax = max(drawingBoxStart.y, constrainedMouseImagePosition().y);
         if (xmax - xmin > 16 && ymax - ymin > 16) {
             let annotation = {
-                'label': 'defaultrectlabelshouldchange',
+                'label': getLabel(),
                 'points': [createVector(xmin, ymin), createVector(xmax, ymax)],
                 'mode': mode
             };
