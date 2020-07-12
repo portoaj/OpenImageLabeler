@@ -10,6 +10,7 @@ let selectedAnnotation = null;
 let selectedPolyPoint = null;
 let selectedLabel = null;
 const polyPointRadius = 4; //Radius in px
+const minShapeDimension = 5; //Minimum dimension in px for annotations
 /*
 Image Object structure
 {
@@ -135,13 +136,13 @@ function mousePressed() {
         return;
     } else
         selectedAnnotation = null;
-    
-    
+
+
     //Start drawing rect if applicable
     if (mode === 'rect') {
         //Must have label selected
         //TODO alert user if this causes issue
-        if(!canAnnotate) {
+        if (!canAnnotate) {
             return;
         }
 
@@ -152,19 +153,40 @@ function mousePressed() {
     }
     //Start drawing poly if applicable or end
     else if (mode === 'poly') {
+        //Check if this is user is creating poly
         if (drawingPoly === false) {
             drawingPoly = true;
             polyPoints.push(constrainedMouseImagePosition());
-        } else if (dist(constrainedMousePosition().x, constrainedMousePosition().y, imagePositionToCanvasPosition(polyPoints[0]).x, imagePositionToCanvasPosition(polyPoints[0]).y) < 20) {
-            let annotation = {
-                'label': getLabel(),
-                'points': polyPoints,
-                'mode': mode
-            };
-            currentImage.annotations.push(annotation);
+        }
+        //Check if user is finalizing poly
+        else if (dist(constrainedMousePosition().x, constrainedMousePosition().y, imagePositionToCanvasPosition(polyPoints[0]).x, imagePositionToCanvasPosition(polyPoints[0]).y) < 20) {
+            let xmin = polyPoints[0].x;
+            let xmax = polyPoints[0].x;
+            let ymin = polyPoints[0].y;
+            let ymax = polyPoints[0].y;
+            for (let i = 1; i < polyPoints.length; i++) {
+                if (polyPoints[i].x < xmin)
+                    xmin = polyPoints[i].x;
+                else if (polyPoints[i].x > xmax)
+                    xmax = polyPoints[i].x;
+                if (polyPoints[i].y < ymin)
+                    ymin = polyPoints[i].y;
+                else if (polyPoints[i].y > ymax)
+                    ymax = polyPoints[i].y;
+            }
+            if (!(xmax - xmin < minShapeDimension || ymax - ymin < minShapeDimension)) {
+                let annotation = {
+                    'label': getLabel(),
+                    'points': polyPoints,
+                    'mode': mode
+                };
+                currentImage.annotations.push(annotation);
+            }
             drawingPoly = false;
             polyPoints = [];
-        } else {
+        }
+        //Add next point to poly
+        else {
             polyPoints.push(constrainedMouseImagePosition());
         }
 
@@ -174,7 +196,7 @@ function mousePressed() {
 function mouseReleased() {
     if (drawingBox) {
         //Only create box annotation if there is a valid label
-        if(!canAnnotate()) {
+        if (!canAnnotate()) {
             drawingBox = false;
             drawingBoxStart = null;
             return;
@@ -199,6 +221,10 @@ function mouseReleased() {
 }
 
 function keyPressed() {
+    //TODO remove debug print below
+    if (keyCode === 72 && currentImage) {
+        console.log(currentImage.annotations);
+    }
     if ((keyCode === 8 || keyCode === 46) && selectedAnnotation !== null) {
         let selectedAnnotationIndex = 0;
         for (let i = 0; i < currentImage.annotations.length; i++) {
