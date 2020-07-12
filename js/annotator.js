@@ -126,9 +126,6 @@ function mousePressed(event) {
             break;
         }
     }
-
-        
-
     //Ignore mouse click if mouse out of canvas
     if (mouseX > width || mouseX < 0 || mouseY > height || mouseY < 0) {
         if(!selectedChip) {
@@ -151,9 +148,6 @@ function mousePressed(event) {
         selectedAnnotation = null;
         exitAnnotationMode();
     }
-
-
-
     //Start drawing rect if applicable
     if (mode === 'rect') {
         //Must have label selected
@@ -253,6 +247,7 @@ function keyPressed() {
     }
 }
 
+//Try to select an annotation
 function trySelect() {
     for (let i = 0; i < currentImage.annotations.length; i++) {
         if (currentImage.annotations[i].mode === 'rect') {
