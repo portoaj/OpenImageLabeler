@@ -66,6 +66,10 @@
   border-bottom-color: #f06292;
 }
 
+.row .full-width {
+  width: 100%;
+}
+
 .option-padding {
   padding: 20px;
 }
