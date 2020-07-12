@@ -118,10 +118,23 @@ function draw() {
     }
 }
 
-function mousePressed() {
+function mousePressed(event) {
+    let selectedChip = false;
+    for (let i = 0; i < event['path'].length; i++) {
+        if (event['path'][i].id === 'labels-container') {
+            selectedChip = true;
+            break;
+        }
+    }
+
+        
+
     //Ignore mouse click if mouse out of canvas
     if (mouseX > width || mouseX < 0 || mouseY > height || mouseY < 0) {
-        selectedAnnotation = null;
+        if(!selectedChip) {
+            selectedAnnotation = null;
+            exitAnnotationMode();
+        }
         drawingPoly = false;
         polyPoints = [];
         return;
@@ -134,8 +147,11 @@ function mousePressed() {
         drawingPoly = false;
         polyPoints = [];
         return;
-    } else
+    } else {
         selectedAnnotation = null;
+        exitAnnotationMode();
+    }
+
 
 
     //Start drawing rect if applicable
@@ -232,6 +248,7 @@ function keyPressed() {
                 selectedAnnotationIndex = i;
         }
         currentImage.annotations.splice(selectedAnnotationIndex, 1);
+        exitAnnotationMode();
         selectedAnnotation = null;
     }
 }
@@ -248,6 +265,7 @@ function trySelect() {
             const mousePosition = constrainedMousePosition();
             if (mousePosition.x > xmin && mousePosition.x < xmax && mousePosition.y > ymin && mousePosition.y < ymax) {
                 selectedAnnotation = currentImage.annotations[i];
+                startAnnotationMode(selectedAnnotation);
                 return true;
             }
         } else if (currentImage.annotations[i].mode === 'poly') {
@@ -257,11 +275,11 @@ function trySelect() {
             }
             if (pointIsInPoly(constrainedMousePosition(), canvasPoints)) {
                 selectedAnnotation = currentImage.annotations[i];
+                startAnnotationMode(selectedAnnotation);
                 return true;
             }
         }
     }
-    //TODO make this work: https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon#:~:text=Look%20at%20the%20polygon%20as,it%20is%20inside%20the%20polygon.
     return false;
 }
 

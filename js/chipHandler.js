@@ -1,5 +1,8 @@
 let chipsInstance = null;
 let label = 'nolabel';
+let annotationModeLabel = 'nolabel';
+let annotationMode = false;
+let lastPickedChip = null;
 
 //Sets chip instance as DOM initializes
 function setChipsInstance(instance) {
@@ -7,13 +10,16 @@ function setChipsInstance(instance) {
 }
 
 //Handles chip selection and background highlighting
-function chipSelected(chipObj) {
-    label = chipObj.textContent.slice(0, chipObj.textContent.length - 5);
-    let chipObjs = chipsInstance['$chips'];
-    for (let i = 0; i < chipObjs.length; i++) {
-        chipObjs[i].style.backgroundColor = '#e4e4e4';
-    }
-    chipObj.style.backgroundColor = '#4fc3f7';
+function chipSelected(input) {
+    //Return to avoid error from dummy call
+    if (input[0]['M_Chips']['_selectedChip'] === null)
+        return;
+    let chipObj = input[0]['M_Chips']['_selectedChip'][0];
+    if(annotationMode === true)
+        selectedAnnotation.label = chipObj.textContent.slice(0, chipObj.textContent.length - 5);
+    else
+        label = chipObj.textContent.slice(0, chipObj.textContent.length - 5);
+    recolorLabels();
 }
 
 //Makes sure annotations only occur when label is valid
@@ -25,20 +31,20 @@ function canAnnotate() {
 function chipAdded(chipObj, singleChip) {
     if (singleChip) {
         label = chipObj.textContent.slice(0, chipObj.textContent.length - 5);
-        if (chipsInstance === null)
-            trySelectChip(0);
-        else {
-            chipsInstance.selectChip(0);
-        }
+        trySelectChip(0, 0);
     }
 }
 
 //Selects a chip if chipsInstance has loaded, otherwise it tries again after a delay
-function trySelectChip(index) {
-    if (chipsInstance !== null) {
-        chipsInstance.selectChip(index)
+function trySelectChip(index, attempt) {
+    if (attempt > 50) {
+        console.log('trySelectChip failed for index: ' + index.toString());
+        return;
+    }
+    if (chipsInstance !== null && chipsInstance['chipsData'].length !== 0) {
+        chipsInstance.selectChip(index);
     } else {
-        setTimeout(trySelectChip, 30, index);
+        setTimeout(trySelectChip, 30, index, attempt + 1);
     }
 }
 
@@ -46,32 +52,97 @@ function trySelectChip(index) {
 function chipDeleted(singleChip, noChips) {
     if (singleChip) {
         label = chipsInstance['chipsData'][0]['tag'];
-        if (chipsInstance === null)
-            trySelectChip(0);
-        else {
-            chipsInstance.selectChip(0);
-        }
+        trySelectChip(0, 0);
+
     } else if (noChips) {
         label = null;
-    } else {
-        let labeledChipExists = false;
-        const chipsData = chipsInstance['chipsData'];
-        for (let i = 0; i < chipsData.length; i++) {
-            if (chipsData[i]['tag'] === label) {
-                labeledChipExists = true;
-                break;
-            }
-        }
-        if (!labeledChipExists) {
-            if (chipsInstance === null)
-                trySelectChip(0);
-            else {
-                chipsInstance.selectChip(0);
-            }
+    }
+    //More than one chip so make sure one is selected
+    else {
+        if (!hasChip(getLabel())) {
+            trySelectChip(0, 0);
         }
     }
 }
+
+//Load chips for specific annotation
+function startAnnotationMode(annotation) {
+    console.log('enter');
+    annotationMode = true;
+    lastPickedChip = getLabel();
+    if (!hasChip(annotation.label)) {
+        console.log(chipsInstance);
+        chipsInstance.addChip({
+            tag: annotation.label
+        });
+    }
+    const chipObjs = chipsInstance['$chips'];
+    for (let i = 0; i < chipObjs.length; i++) {
+        if (chipObjs[i].textContent.slice(0, chipObjs[i].textContent.length - 5) === annotation.label) {
+            chipObjs[i].style.backgroundColor = '#ffb300';
+        } else
+            chipObjs[i].style.backgroundColor = '#e4e4e4';
+    }
+}
+
+//Reset chips to normal state
+function exitAnnotationMode() {
+    console.log('exit');
+    //TODO reselect last picked chip
+    annotationMode = false;
+    if (lastPickedChip) {
+        if (!hasChip(lastPickedChip)) {
+            chipsInstance.addChip({
+                tag: lastPickedChip
+            });
+        }
+        trySelectChip(getChipIndex(lastPickedChip), 0);
+    }
+    recolorLabels();
+}
+
 //Return label
 function getLabel() {
     return label;
+}
+
+//Returns whether or not that chip is currently loaded
+function hasChip(chipTag) {
+    const chipsData = chipsInstance['chipsData'];
+    for (let i = 0; i < chipsData.length; i++)
+        if (chipsData[i]['tag'] === chipTag)
+            return true;
+    return false;
+}
+
+//Gets the index in chips of the chip with the given tag
+function getChipIndex(chipTag) {
+    const chipsData = chipsInstance['chipsData'];
+    for (let i = 0; i < chipsData.length; i++)
+        if (chipsData[i]['tag'] === chipTag)
+            return i;
+    return -1;
+
+}
+
+//Recolors labels
+function recolorLabels() {
+    //If in annotation mode just change the annotations label
+    if (annotationMode === true) {
+        const chipObjs = chipsInstance['$chips'];
+        for (let i = 0; i < chipObjs.length; i++) {
+            if (chipObjs[i].textContent.slice(0, chipObjs[i].textContent.length - 5) === selectedAnnotation.label) {
+                chipObjs[i].style.backgroundColor = '#ffb300';
+            } else
+                chipObjs[i].style.backgroundColor = '#e4e4e4';
+        }
+    } else {
+        let chipObjs = chipsInstance['$chips'];
+        for (let i = 0; i < chipObjs.length; i++) {
+            if (chipObjs[i].textContent.slice(0, chipObjs[i].textContent.length - 5) === getLabel()) {
+                chipObjs[i].style.backgroundColor = '#4fc3f7';
+            } else
+                chipObjs[i].style.backgroundColor = '#e4e4e4';
+        }
+    }
 }

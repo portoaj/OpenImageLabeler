@@ -107,8 +107,7 @@
                         </ul>
                     </li>
                     <li>
-                        <div class="labels-container z-depth-1">
-                            
+                        <div id="labels-container" class="labels-container z-depth-1">
                             <span class="bold pink-text text-lighten-2">Labels</span>
                             <div class="chips-placeholder" id="chips-selector"></div>
                         </div>
@@ -134,7 +133,7 @@
             $('.collapsible').collapsible();
         });
         $('.chips-placeholder').chips({
-            onChipSelect: (input) => chipSelected(input[0]['M_Chips']['_selectedChip'][0]),
+            onChipSelect: (input) => chipSelected(input),
             onChipAdd: (input) => chipAdded(input[0].childNodes[input[0].childNodes.length - 2], input[0].childNodes.length === 2),
             onChipDelete: (input) => chipDeleted(input[0].childNodes.length === 2, input[0].childNodes.length === 1),
             placeholder: 'Enter a label',
