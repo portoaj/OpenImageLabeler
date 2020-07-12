@@ -67,7 +67,6 @@ function chipDeleted(singleChip, noChips) {
 
 //Load chips for specific annotation
 function startAnnotationMode(annotation) {
-    console.log('enter');
     annotationMode = true;
     lastPickedChip = getLabel();
     if (!hasChip(annotation.label)) {
@@ -87,8 +86,6 @@ function startAnnotationMode(annotation) {
 
 //Reset chips to normal state
 function exitAnnotationMode() {
-    console.log('exit');
-    //TODO reselect last picked chip
     annotationMode = false;
     if (lastPickedChip) {
         if (!hasChip(lastPickedChip)) {
