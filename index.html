@@ -91,7 +91,7 @@
                                 </a>
                                 <div class="collapsible-body no-padding">
                                     <ul>
-                                        <a href="#!" class="waves-effect waves-purple display-block">
+                                        <a href="#!" onclick="exportPascalVOCXML();" class="waves-effect waves-purple display-block">
                                             <li class="option-padding pink-text text-lighten-2"><i
                                                     class="material-icons sub-icons left">save</i>Pascal VOC XML</li>
                                         </a>
@@ -121,11 +121,16 @@
     <script type="text/javascript" src="js/bin/materialize.min.js"></script>
     <!-- p5.js -->
     <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+    <!-- Import JSZip -->
+    <script src="js/jszip.min.js"></script>
+    <!-- Import FileSaver -->
+    <script src="js/FileSaver.js"></script>
     <!-- Custom JS -->
     <script src="js/annotator.js"></script>
     <script src="js/inputHandler.js"></script>
     <script src="js/navigator.js"></script>
     <script src="js/chipHandler.js"></script>
+    <script src="js/exporter.js"></script>
     <script>
         $(document).ready(function () {
             $('.collapsible').collapsible();
@@ -142,7 +147,6 @@
             tag: 'default'
         });
         setChipsInstance(chipsStartupInstance);
-       // chipsInstance.selectChip(1);
     </script>
 </body>
 </html>
