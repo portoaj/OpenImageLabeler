@@ -194,6 +194,7 @@ function mousePressed(event) {
             }
             drawingPoly = false;
             polyPoints = [];
+            currentImage.annotated = true;
         }
         //Add next point to poly
         else {
