@@ -347,9 +347,15 @@ function setRectMode() {
     mode = 'rect';
 }
 
-function updateImage() {
-    currentImage = images[getIndex() - 1];
-    currentImagep5 = loadImage(currentImage.base64);
+function tryUpdateImage() {
+    if(images !== null && images.length > getIndex() - 1) {
+        currentImage = images[getIndex() - 1];
+        currentImagep5 = loadImage(currentImage.base64);
+    }
+    else {
+        setTimeout(tryUpdateImage, 30);
+    }
+    
 }
 
 function setPolyMode() {

@@ -3,7 +3,7 @@ let index = 1;
 function updateNavigator() {
     document.getElementById('navigator-text').textContent = index + ' / ' + getImages().length;
     if(getImages().length > 0)
-        updateImage();
+        tryUpdateImage();
 }
 
 function navigateLeft() {
