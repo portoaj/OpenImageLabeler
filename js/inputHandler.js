@@ -39,6 +39,7 @@ function importImage(tempImageFile) {
     let valid = true;
     const validExtensions = ['jpg', 'png'];
     const validHeaders = ['data:image/png;', 'data:image/jpeg;'];
+    beginLoading();
     const processImage = () => {
         let validImages = [];
         let invalidImages = [];
@@ -92,6 +93,7 @@ function importImage(tempImageFile) {
                 reference.depth = 1;
         });
         appendImages(validImages);
+        endLoading();
         updateNavigator();
     }
     const recurseImage = (fileArray) => {
@@ -126,6 +128,7 @@ function importImageFolder(fileArray) {
     let tempImages = [];
     const validExtensions = ['jpg', 'png'];
     const validHeaders = ['data:image/png;', 'data:image/jpeg;'];
+    beginLoading();
     const processImages = () => {
         let validImages = [];
         let invalidImages = [];
@@ -191,6 +194,7 @@ function importImageFolder(fileArray) {
             });
         }
         appendImages(validImages);
+        endLoading();
         updateNavigator();
     }
     const recurseImages = (fileArray) => {
@@ -234,4 +238,26 @@ function changeImage(direction) {
         navigateLeft();
     else if (direction === 'right')
         navigateRight();
+}
+
+function beginLoading() {
+    let loadingCircle = '<div class="preloader-wrapper active" id="loading-circle" style="top:10px; left:10px;">\
+    <div class="spinner-layer">\
+      <div class="circle-clipper left">\
+        <div class="circle"></div>\
+      </div><div class="gap-patch">\
+        <div class="circle"></div>\
+      </div><div class="circle-clipper right">\
+        <div class="circle"></div>\
+      </div>\
+    </div>\
+  </div>';
+  document.getElementById('placeholder').insertAdjacentHTML('afterbegin', loadingCircle);
+}
+
+function endLoading() {
+    let loadingElement = document.getElementById('loading-circle');
+    if(loadingElement !== null) 
+        loadingElement.parentNode.removeChild(loadingElement);
+
 }
