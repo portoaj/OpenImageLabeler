@@ -235,7 +235,3 @@ function changeImage(direction) {
     else if (direction === 'right')
         navigateRight();
 }
-
-function exportAnnotations(format) {
-
-}
