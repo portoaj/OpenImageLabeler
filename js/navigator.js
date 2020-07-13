@@ -7,7 +7,6 @@ function updateNavigator() {
 }
 
 function navigateLeft() {
-    console.log('left');
     index -= 1;
     if (index < 1) {
         index = getImages().length;
@@ -16,7 +15,6 @@ function navigateLeft() {
 }
 
 function navigateRight() {
-    console.log('right');
     index += 1;
     if (index > getImages().length) {
         if (getImages().length > 0) {
