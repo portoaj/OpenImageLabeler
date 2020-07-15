@@ -232,10 +232,6 @@ function mouseReleased() {
 }
 
 function keyPressed() {
-    //TODO remove debug print below
-    if (keyCode === 72 && currentImage) {
-        console.log(currentImage.annotations);
-    }
     if ((keyCode === 8 || keyCode === 46) && selectedAnnotation !== null) {
         let selectedAnnotationIndex = 0;
         for (let i = 0; i < currentImage.annotations.length; i++) {
@@ -327,7 +323,7 @@ function canvasPositionToImagePosition(positionVector) {
 //Convert from image pixel coordinates to canvas coordinates
 function imagePositionToCanvasPosition(canvasVector) {
     let scaleRatios = createVector(width / currentImage.width, height / currentImage.height);
-    return createVector(constrain(canvasVector.x * scaleRatios.x, 0, currentImage.width), constrain(canvasVector.y * scaleRatios.y, 0, currentImage.height));
+    return createVector(constrain(canvasVector.x * scaleRatios.x, 0, width), constrain(canvasVector.y * scaleRatios.y, 0, height));
 }
 
 //Return whether or not mouse is outside of canvas
@@ -355,7 +351,6 @@ function tryUpdateImage() {
     else {
         setTimeout(tryUpdateImage, 30);
     }
-    
 }
 
 function setPolyMode() {
