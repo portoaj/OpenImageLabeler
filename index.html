@@ -10,13 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Import custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
-    <title>Image Labeler</title>
+    <title>Nexstream Technologies Image Labeler</title>
 </head>
 
 <body>
-    <header>
-        <h1 class="center pink-text text-lighten-2">
-            Open Image Labeler
+    <header class="center-align">
+        <img src="favicon.png" alt="Nexstream Logo" class="inline logo">
+        <h1 class="center cyan-text text-darken-1 inline">
+            Image Labeler
         </h1>
     </header>
     <div class="container">
@@ -26,17 +27,17 @@
                     <li>
                         <ul class="collapsible">
                             <li><a href="#"
-                                    class="collapsible-header waves-effect waves-purple pink-text text-lighten-2 bold">
+                                    class="collapsible-header waves-effect waves-purple cyan-text text-darken-1 bold">
                                     Import
                                 </a>
                                 <div class="collapsible-body no-padding">
                                     <ul>
                                         <a href="#!" id="import-image" class="waves-effect waves-purple display-block">
-                                            <li class="option-padding pink-text text-lighten-2"><i
+                                            <li class="option-padding cyan-text text-darken-1"><i
                                                     class="material-icons sub-icons left">insert_photo</i>Image</li>
                                         </a>
                                         <a href="#!" id="import-folder" class="waves-effect waves-purple">
-                                            <li class="option-padding pink-text text-lighten-2"><i
+                                            <li class="option-padding cyan-text text-darken-1"><i
                                                     class="material-icons sub-icons left">folder_open</i>Image Folder
                                             </li>
                                         </a>
@@ -48,18 +49,18 @@
                     <li>
                         <ul class="collapsible remove-top-border">
                             <li><a href="#"
-                                    class="collapsible-header waves-effect waves-purple pink-text text-lighten-2 bold">
+                                    class="collapsible-header waves-effect waves-purple cyan-text text-darken-1 bold">
                                     Mode
                                 </a>
                                 <div class="collapsible-body no-padding">
                                     <ul>
                                         <a href="#!" onclick="changeAnnotationMode('rect');" class="waves-effect waves-purple display-block">
-                                            <li class="option-padding pink-text text-lighten-2"><i
+                                            <li class="option-padding cyan-text text-darken-1"><i
                                                     class="material-icons sub-icons left">check_box_outline_blank</i>Rectangle
                                             </li>
                                         </a>
                                         <a href="#!" onclick="changeAnnotationMode('poly');" class="waves-effect waves-purple full-width">
-                                            <li class="option-padding pink-text text-lighten-2"><i
+                                            <li class="option-padding cyan-text text-darken-1"><i
                                                     class="material-icons sub-icons left">gesture</i>Polygon</li>
                                         </a>
                                     </ul>
@@ -68,12 +69,12 @@
                         </ul>
                     </li>
                     <li>
-                        <div id="navigation" class="z-depth-1 pink-text text-lighten-2 center">
+                        <div id="navigation" class="z-depth-1 cyan-text text-darken-1 center">
                              <a onclick="changeImage('left');" href="#"><i
-                                    class="no-margin material-icons left pink-text text-lighten-2 waves-effect waves-purple">arrow_back_ios</i></a>
+                                    class="no-margin material-icons left cyan-text text-darken-1 waves-effect waves-purple">arrow_back_ios</i></a>
                                     <span id="navigator-text">0 / 0</span>
                             <a onclick="changeImage('right');" href="#"><i
-                                    class="no-margin material-icons right flip-horizontal pink-text text-lighten-2 waves-effect waves-purple">arrow_back_ios</i></a>
+                                    class="no-margin material-icons right flip-horizontal cyan-text text-darken-1 waves-effect waves-purple">arrow_back_ios</i></a>
                         </div>
                     </li>
                 </ul>
@@ -86,13 +87,13 @@
                     <li>
                         <ul class="collapsible">
                             <li><a href="#"
-                                    class="collapsible-header waves-effect waves-purple pink-text text-lighten-2 bold">
+                                    class="collapsible-header waves-effect waves-purple cyan-text text-darken-1 bold">
                                     Export
                                 </a>
                                 <div class="collapsible-body no-padding">
                                     <ul>
                                         <a href="#!" onclick="exportPascalVOCXML();" class="waves-effect waves-purple display-block">
-                                            <li class="option-padding pink-text text-lighten-2"><i
+                                            <li class="option-padding cyan-text text-darken-1"><i
                                                     class="material-icons sub-icons left">save</i>Pascal VOC XML</li>
                                         </a>
                                     </ul>
@@ -102,7 +103,7 @@
                     </li>
                     <li>
                         <div id="labels-container" class="labels-container z-depth-1">
-                            <span class="bold pink-text text-lighten-2">Labels</span>
+                            <span class="bold cyan-text text-darken-1">Labels</span>
                             <div class="chips-placeholder" id="chips-selector"></div>
                         </div>
                     </li>
