@@ -37,7 +37,7 @@ function importImage(tempImageFile) {
     let tempImage = null;
     let processed = false;
     let valid = true;
-    const validExtensions = ['jpg', 'png'];
+    const validExtensions = ['jpg', 'jpeg', 'png'];
     const validHeaders = ['data:image/png;', 'data:image/jpeg;'];
     beginLoading();
     const processImage = () => {
@@ -126,7 +126,7 @@ function importImage(tempImageFile) {
 
 function importImageFolder(fileArray) {
     let tempImages = [];
-    const validExtensions = ['jpg', 'png'];
+    const validExtensions = ['jpg', 'jpeg', 'png'];
     const validHeaders = ['data:image/png;', 'data:image/jpeg;'];
     beginLoading();
     const processImages = () => {

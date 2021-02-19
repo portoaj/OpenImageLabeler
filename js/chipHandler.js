@@ -112,6 +112,12 @@ function hasChip(chipTag) {
     return false;
 }
 
+function getChipTags() {
+    let chipTags = [];
+    chipsInstance['chipsData'].map((instance)=>chipTags.push(instance['tag']));
+    return chipTags;
+}
+
 //Gets the index in chips of the chip with the given tag
 function getChipIndex(chipTag) {
     const chipsData = chipsInstance['chipsData'];
@@ -119,7 +125,17 @@ function getChipIndex(chipTag) {
         if (chipsData[i]['tag'] === chipTag)
             return i;
     return -1;
+}
 
+//Gets the index in chips of the chip with the given tag ignoring the default tag
+function getChipIndexNoDefault(chipTag) {
+    const chipTags = getChipTags();
+    if(chipTags.indexOf('default') !== -1)
+        chipTags.splice(chipTags.indexOf('default'), 1);
+    for (let i = 0; i < chipTags.length; i++)
+        if (chipTags[i] === chipTag)
+            return i;
+    return -1;
 }
 
 //Recolors labels
