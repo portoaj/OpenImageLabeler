@@ -1,0 +1,23 @@
+{
+  "name": "openimagelabeler",
+  "version": "0.1.0",
+  "description": "Image annotation tool for Object Detection dataset creation",
+  "main": " ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/portoaj/OpenImageLabeler.git"
+  },
+  "author": "Andrew Masek",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/portoaj/OpenImageLabeler/issues"
+  },
+  "homepage": "https://github.com/portoaj/OpenImageLabeler#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-minify": "^3.1.0"
+  }
+}

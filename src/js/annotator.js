@@ -27,7 +27,8 @@ Annotation Object structure
 {
     'label': label,
     'points': [...],
-    'mode': mode
+    'mode': mode,
+    
 }
 Rect mode has one point at top-left and one point and bottom-right
 */
