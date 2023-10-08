@@ -70,7 +70,6 @@ function startAnnotationMode(annotation) {
     annotationMode = true;
     lastPickedChip = getLabel();
     if (!hasChip(annotation.label)) {
-        console.log(chipsInstance);
         chipsInstance.addChip({
             tag: annotation.label
         });
