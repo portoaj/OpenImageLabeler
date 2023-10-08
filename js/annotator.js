@@ -120,15 +120,11 @@ function draw() {
 }
 
 function mousePressed(event) {
-    let selectedChip = false;
-    for (let i = 0; i < event['path'].length; i++) {
-        if (event['path'][i].id === 'labels-container') {
-            selectedChip = true;
-            break;
-        }
-    }
+    const selectedChip = event.target.classList.contains('chip');
+
     //Ignore mouse click if mouse out of canvas
     if (mouseX > width || mouseX < 0 || mouseY > height || mouseY < 0) {
+        // If the click was selecting an annotation class then don't exit annotation mode
         if(!selectedChip) {
             selectedAnnotation = null;
             exitAnnotationMode();
@@ -151,7 +147,7 @@ function mousePressed(event) {
     }
     //Start drawing rect if applicable
     if (mode === 'rect') {
-        //Must have label selected
+        //Must have label selected 
         //TODO alert user if this causes issue
         if (!canAnnotate) {
             return;
