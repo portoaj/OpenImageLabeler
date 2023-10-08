@@ -79,7 +79,7 @@ function exportPascalVOCXML() {
         saveAs(blob, "annotations.zip");
     }, (err) => {
         console.log('Download error: ' + err);
-        //TODO create notification if error
+        alert('Download error: ' + err);
     });
 }
 
@@ -158,6 +158,6 @@ function exportAWSObjectDetection() {
         saveAs(blob, "annotations.zip");
     }, (err) => {
         console.log('Download error: ' + err);
-        //TODO create notification if error
+        alert('Download error: ' + err);
     });
 }
